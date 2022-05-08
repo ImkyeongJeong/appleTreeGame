@@ -68,15 +68,46 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public MemberVO selectMember(MemberVO member) {
-		
-		return null;
+	public MemberVO selectMember(String id) {
+		//로그인된 ID정보 넘겨주기
+		MemberVO vo = new MemberVO();
+		String sql = "SELECT * FROM MEMBER WHERE ID = ?";
+		try {
+			conn = dao.getConnection();
+			psmt = conn.prepareStatement(sql);
+			rs = psmt.executeQuery();
+			if(rs.next()) {
+				vo.setId(rs.getString("id"));
+				vo.setPwd(rs.getString("pwd"));
+				vo.setMName(rs.getString("name"));
+				vo.setPhone(rs.getString("phone"));
+				vo.setEmail(rs.getString("email"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			close();
+		}
+		return vo;
 	}
 
 	@Override
 	public int updateMember(MemberVO member) {
-		
-		return 0;
+		String sql = "UPDATE TABBLE MEMBER SET PWD = ?, PHONE = ?,"
+					+ " EMAIL = ?, WHERE ID = ?";
+		int n = 0;
+		try {
+			conn = dao.getConnection();
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, member.getPwd());
+			psmt.setString(2, member.getPhone());
+			psmt.setString(3, member.getEmail());
+			psmt.setString(4, member.getId());
+			n = psmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			close();
+		}
+		return n;
 	}
 
 	@Override
@@ -97,4 +128,25 @@ public class MemberServiceImpl implements MemberService{
 		}
 	}
 
+	
+	//중복체크 / ID&PW확인
+	@Override 
+	public String[] check(String id) {
+		String[] checkIdPwd = new String[2];
+		String sql = "SELECT ID, PWD FROM MEMBER WHERE ID = ?";
+		try {
+			conn = dao.getConnection();
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, id);
+			rs = psmt.executeQuery();
+			if(rs.next()) {
+				checkIdPwd[0] = rs.getString("id");
+				checkIdPwd[1] = rs.getString("pwd");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			close();
+		}
+		return checkIdPwd;
+	}
 }
