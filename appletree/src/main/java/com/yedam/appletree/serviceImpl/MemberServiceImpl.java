@@ -36,6 +36,7 @@ public class MemberServiceImpl implements MemberService{
 			n = psmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
 			close();
 		}
 		return n;
@@ -75,6 +76,7 @@ public class MemberServiceImpl implements MemberService{
 		try {
 			conn = dao.getConnection();
 			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, id);
 			rs = psmt.executeQuery();
 			if(rs.next()) {
 				vo.setId(rs.getString("id"));
@@ -85,6 +87,7 @@ public class MemberServiceImpl implements MemberService{
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
 			close();
 		}
 		return vo;
@@ -92,19 +95,21 @@ public class MemberServiceImpl implements MemberService{
 
 	@Override
 	public int updateMember(MemberVO member) {
-		String sql = "UPDATE TABBLE MEMBER SET PWD = ?, PHONE = ?,"
-					+ " EMAIL = ?, WHERE ID = ?";
+		String sql = "UPDATE MEMBER SET PWD = ?, NAME = ?, PHONE = ?,"
+					+ " EMAIL = ? WHERE ID = ?";
 		int n = 0;
 		try {
 			conn = dao.getConnection();
 			psmt = conn.prepareStatement(sql);
 			psmt.setString(1, member.getPwd());
-			psmt.setString(2, member.getPhone());
-			psmt.setString(3, member.getEmail());
-			psmt.setString(4, member.getId());
+			psmt.setString(2, member.getMName());
+			psmt.setString(3, member.getPhone());
+			psmt.setString(4, member.getEmail());
+			psmt.setString(5, member.getId());
 			n = psmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
 			close();
 		}
 		return n;
@@ -115,19 +120,6 @@ public class MemberServiceImpl implements MemberService{
 		
 		return 0;
 	}
-	
-	private void close() {
-		// 연결순서: conn > psmt > rs
-		// 닫는순서: rs > psmt > conn
-		try {
-			if(rs != null) rs.close();
-			if(psmt != null) psmt.close();
-			if(conn != null) conn.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	
 	//중복체크 / ID&PW확인
 	@Override 
@@ -145,8 +137,22 @@ public class MemberServiceImpl implements MemberService{
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			
+		} finally {
 			close();
 		}
 		return checkIdPwd;
+	}
+	
+	private void close() {
+		// 연결순서: conn > psmt > rs
+		// 닫는순서: rs > psmt > conn
+		try {
+			if(rs != null) rs.close();
+			if(psmt != null) psmt.close();
+			if(conn != null) conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

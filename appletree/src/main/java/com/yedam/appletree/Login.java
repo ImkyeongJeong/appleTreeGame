@@ -9,11 +9,12 @@ import com.yedam.appletree.vo.MemberVO;
 
 public class Login {
 	private Scanner sc = new Scanner(System.in);
+	private MemberService ms = new MemberServiceImpl();
+	private GameMenu game = new GameMenu();
 	//접속 user정보 저장
 	public static MemberVO loginMember = new MemberVO();
 	//접속 user캐릭터정보 저장
 	public static CharacterVO loginCharacter = new CharacterVO();
-	private MemberService ms = new MemberServiceImpl();
 	
 	private void loginTitle() {
 		System.out.println("==============================================");
@@ -32,6 +33,7 @@ public class Login {
 		System.out.println("=    1.비밀번호  2.연락처  3.EMAIL 4.되돌아가기    =");
 		System.out.println("==============================================");
 	}
+	
 	//로그인
 	private void login() {
 		loginTitle();
@@ -45,28 +47,25 @@ public class Login {
 		String checkPwd = checkIdPwd[1];
 		
 		if(checkId != null && checkId.equals(id) && checkPwd.equals(pwd)) {
+			loginMember = ms.selectMember(id);
 			System.out.println("로그인 성공!");
-			loginMember = ms.selectMember(checkId);
 			userMenu();
 		} else if(checkId == null) {
 			System.out.println("존재하지 않는 아이디입니다.");
 		} else if(checkId != null && !checkPwd.equals(pwd)) {
 			System.out.println("비밀번호가 틀렸습니다.");
 		}
-		
 	}
 	
 	//접속 user정보
 	private void loginInfo() {
-		System.out.println(loginMember.getId());
-		System.out.println(loginMember.getPwd());
-		System.out.println(loginMember.getMName());
-		System.out.println(loginMember.getPhone());
-		System.out.println(loginMember.getEmail());
+		System.out.println("ID : " + loginMember.getId());
+		System.out.println("이   름: " + loginMember.getMName());
+		System.out.println("연 락 처: " + loginMember.getPhone());
+		System.out.println("이 메 일: " + loginMember.getEmail());
 	}
 	
-	
-	//사용자 접속메뉴
+	//사용자 메뉴
 	private void userMenu() {
 		boolean b = true;
 		do {
@@ -76,10 +75,12 @@ public class Login {
 			switch(menu) {
 			case 1:
 				//게임접속
-				loginInfo();
+				game.run();
+				break;
 			case 2:
 				//정보수정
 				updateInfo();
+				break;
 			case 3:
 				//로그아웃
 				b = false;
@@ -91,18 +92,22 @@ public class Login {
 	
 	//정보수정
 	private void updateInfo() {
+		//접속자 정보 출력
+		loginInfo();
 		updateInfoTitle();
 		int menu = sc.nextInt();
 		switch(menu) {
 		case 1:
 			//비밀번호 변경
-			
+			cgPwd();
 			break;
 		case 2:
 			//연락처
+			cgPhone();
 			break;
 		case 3:
 			//이메일
+			cgEmail();
 			break;
 		case 4:
 			userMenu();
@@ -111,22 +116,43 @@ public class Login {
 	}
 	
 	//비밀번호 변경
-	private void cPwd() {
+	private void cgPwd() {
+		System.out.println("현재 비밀번호를 입력하세요.");
+		String pwd = sc.next();
+		System.out.println("변경할 비밀번호를 입력하세요.");
+		String cgPwd = sc.next();
 		
+		String[] checkIdPwd = ms.check(loginMember.getId());
+		String checkPwd = checkIdPwd[1];
+		
+		if(checkPwd != null && checkPwd.equals(pwd)) {
+			loginMember.setPwd(cgPwd);
+			ms.updateMember(loginMember);
+			System.out.println("비밀번호 변경완료!");
+		} else if(!checkPwd.equals(pwd)) { 
+			System.out.println("현재 비밀번호가 맞지 않습니다.");
+		}
 	}
+	
 	//연락처 변경
-	private void cPhone() {
-		
+	private void cgPhone() {
+		System.out.println("변경할 연락처를 입력하세요.");
+		String cgPhone = sc.next();
+		loginMember.setPhone(cgPhone);
+		ms.updateMember(loginMember);
+		System.out.println("수정완료!");
 	}
 	//이메일 변경
-	private void cEmail() {
-		
+	private void cgEmail() {
+		System.out.println("변경할 메일을 입력하세요.");
+		String cgEmail = sc.next();
+		loginMember.setPhone(cgEmail);
+		ms.updateMember(loginMember);
+		System.out.println("수정완료!");
 	}
 	
 	
 	public void run() {
 		login();
 	}
-	
-	
 }
