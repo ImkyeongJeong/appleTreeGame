@@ -7,7 +7,7 @@ public interface GameService {
 	int insertChar(String name);
 	//닉네임 중복체크
 	String nameCheck(String name);
-	//현재상태 보기 / 캐릭터 있는지 확인하기
+	//현재상태 보기
 	CharacterVO selectChar(String id);
 	//보유아이템, 돈, 체력 수정
 	int updateChar(CharacterVO character);
