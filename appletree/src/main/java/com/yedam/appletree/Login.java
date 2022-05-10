@@ -11,6 +11,7 @@ public class Login {
 	private Scanner sc = new Scanner(System.in);
 	private MemberService ms = new MemberServiceImpl();
 	private GameMenu game = new GameMenu();
+	private InfoUpdate infoUpdate = new InfoUpdate();
 	//접속 user정보 저장
 	public static MemberVO loginMember = new MemberVO();
 	//접속 user캐릭터정보 저장
@@ -27,13 +28,7 @@ public class Login {
 		System.out.println("=      1.게임접속    2.정보수정    3.로그아웃      =");
 		System.out.println("==============================================");
 	}
-	
-	private void updateInfoTitle() {
-		System.out.println("==============================================");
-		System.out.println("=    1.비밀번호  2.연락처  3.EMAIL 4.되돌아가기    =");
-		System.out.println("==============================================");
-	}
-	
+
 	//로그인
 	private void login() {
 		loginTitle();
@@ -57,14 +52,6 @@ public class Login {
 		}
 	}
 	
-	//접속 user정보
-	private void loginInfo() {
-		System.out.println("ID : " + loginMember.getId());
-		System.out.println("이   름: " + loginMember.getMName());
-		System.out.println("연 락 처: " + loginMember.getPhone());
-		System.out.println("이 메 일: " + loginMember.getEmail());
-	}
-	
 	//사용자 메뉴
 	private void userMenu() {
 		boolean b = true;
@@ -79,7 +66,7 @@ public class Login {
 				break;
 			case 2:
 				//정보수정
-				updateInfo();
+				infoUpdate.run();
 				break;
 			case 3:
 				//로그아웃
@@ -89,68 +76,6 @@ public class Login {
 		}
 		while(b);
 	}
-	
-	//정보수정
-	private void updateInfo() {
-		//접속자 정보 출력
-		loginInfo();
-		updateInfoTitle();
-		int menu = sc.nextInt();
-		switch(menu) {
-		case 1:
-			//비밀번호 변경
-			cgPwd();
-			break;
-		case 2:
-			//연락처
-			cgPhone();
-			break;
-		case 3:
-			//이메일
-			cgEmail();
-			break;
-		case 4:
-			userMenu();
-			break;
-		}
-	}
-	
-	//비밀번호 변경
-	private void cgPwd() {
-		System.out.println("현재 비밀번호를 입력하세요.");
-		String pwd = sc.next();
-		System.out.println("변경할 비밀번호를 입력하세요.");
-		String cgPwd = sc.next();
-		
-		String[] checkIdPwd = ms.check(loginMember.getId());
-		String checkPwd = checkIdPwd[1];
-		
-		if(checkPwd != null && checkPwd.equals(pwd)) {
-			loginMember.setPwd(cgPwd);
-			ms.updateMember(loginMember);
-			System.out.println("비밀번호 변경완료!");
-		} else if(!checkPwd.equals(pwd)) { 
-			System.out.println("현재 비밀번호가 맞지 않습니다.");
-		}
-	}
-	
-	//연락처 변경
-	private void cgPhone() {
-		System.out.println("변경할 연락처를 입력하세요.");
-		String cgPhone = sc.next();
-		loginMember.setPhone(cgPhone);
-		ms.updateMember(loginMember);
-		System.out.println("수정완료!");
-	}
-	//이메일 변경
-	private void cgEmail() {
-		System.out.println("변경할 메일을 입력하세요.");
-		String cgEmail = sc.next();
-		loginMember.setPhone(cgEmail);
-		ms.updateMember(loginMember);
-		System.out.println("수정완료!");
-	}
-	
 	
 	public void run() {
 		login();
