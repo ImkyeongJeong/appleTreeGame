@@ -116,9 +116,20 @@ public class MemberServiceImpl implements MemberService{
 	}
 
 	@Override
-	public int deleteMember(MemberVO member) {
-		
-		return 0;
+	public int deleteMember(String id) {
+		String sql = "DELETE FROM MEMBER WHERE ID = ?";
+		int n = 0;
+		try {
+			conn = dao.getConnection();
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, id);
+			n = psmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return n;
 	}
 	
 	//중복체크 / ID&PW확인

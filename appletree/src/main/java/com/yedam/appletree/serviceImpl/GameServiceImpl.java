@@ -17,7 +17,7 @@ public class GameServiceImpl implements GameService{
 	private ResultSet rs;
 	CharacterVO vo;
 	
-	@Override
+	@Override //캐릭터 생성
 	public int insertChar(String name) {
 		int n = 0;
 		String sql = "INSERT INTO character VALUES(?, ?, DEFAULT, DEFAULT)";
@@ -35,7 +35,7 @@ public class GameServiceImpl implements GameService{
 		return n;
 	}
 
-	@Override
+	@Override //닉네임 중복체크
 	public String nameCheck(String name) {
 		String checkName = null;
 		String sql = "SELECT name FROM character WHERE ID = ?";
@@ -55,18 +55,18 @@ public class GameServiceImpl implements GameService{
 		return checkName;
 	}
 
-	@Override
+	@Override //현재상태보기
 	public CharacterVO selectChar(String id) {
 		
 		return null;
 	}
 
-	@Override
+	@Override //보유아이템, 돈, 체력 수정
 	public int updateChar(CharacterVO character) {
 		return 0;
 	}
 
-	@Override
+	@Override //캐릭터 삭제
 	public int deleteChar(CharacterVO character) {
 		return 0;
 	}

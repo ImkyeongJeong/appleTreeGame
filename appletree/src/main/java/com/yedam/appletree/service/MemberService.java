@@ -16,5 +16,5 @@ public interface MemberService {
 	//회원수정
 	int updateMember(MemberVO member);
 	//회원탈퇴
-	int deleteMember(MemberVO member);
+	int deleteMember(String id);
 }

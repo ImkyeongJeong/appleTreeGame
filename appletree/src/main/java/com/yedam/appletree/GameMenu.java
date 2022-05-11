@@ -1,8 +1,12 @@
 package com.yedam.appletree;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
+import com.yedam.appletree.service.AppleService;
 import com.yedam.appletree.service.GameService;
+import com.yedam.appletree.serviceImpl.AppleServiceImpl;
 import com.yedam.appletree.serviceImpl.GameServiceImpl;
 import com.yedam.appletree.vo.AppleVO;
 
@@ -10,6 +14,9 @@ public class GameMenu {
 	private Scanner sc = new Scanner(System.in);
 	private GameService gs = new GameServiceImpl();
 	private AppleVO apple = new AppleVO();
+	private AppleService as = new AppleServiceImpl();
+	private int index = 1;
+	private AppleVO vo;
 	
 	private void gameTitle() {
 		System.out.println("==============================================");
@@ -19,9 +26,10 @@ public class GameMenu {
 		System.out.println("==============================================");
 	}
 	
+	//현재상태(날씨, 총 수확 사과 개수, 체력) / 아이템(보유아이템(사과포함), 돈
 	private void gameMenuTitle() {
 		System.out.println("==============================================");
-		System.out.println("=        1.현재상태   2.장소이동   3.게임종료       =");
+		System.out.println("=   1.현재상태  2.아이템창  3.이동하기  4.게임종료    =");
 		System.out.println("==============================================");
 	}
 	
@@ -36,9 +44,12 @@ public class GameMenu {
 				getStatus();
 				break;
 			case 2:
-				move();
+				itemList();
 				break;
 			case 3:
+				move();
+				break;
+			case 4:
 				b = false;
 				break;
 			}
@@ -69,15 +80,23 @@ public class GameMenu {
 			checkChar();
 		} else if(gs.nameCheck(name).equals(name)) {
 			System.out.println("이미 존재하는 닉네임입니다.");
+			insertChar();
 		}
 	}
 	
-	//현재상태 불러오기(수확한 사과 개수, 체력, 보유 아이템, 돈) / 날씨
+	//1.현재상태 불러오기(날씨, 총 수확 사과 개수, 체력)
 	private void getStatus() {
-		System.out.println("현재상태 얍");
+		String name = gs.nameCheck(Login.loginMember.getId());
+		System.out.println("[" + name + "]님의 현재상태");
 	}
 	
-	//장소이동(농장, 온천, 상점)
+	//2.해당 캐릭터 아이템창 보기
+	private void itemList() {
+		String name = gs.nameCheck(Login.loginMember.getId());
+		System.out.println("[" + name + "]님의 아이템");
+	}
+	
+	//3.장소이동(농장, 온천, 상점)
 	private void move() {
 		boolean b = true;
 		do {
@@ -91,6 +110,9 @@ public class GameMenu {
 				
 				break;
 			case 3:
+
+				break;
+			case 4:
 				b = false;
 				break;
 			}
@@ -98,17 +120,80 @@ public class GameMenu {
 		while(b);
 	}
 	
-	//사과나무 컨트롤 메서드
+	//농장: 사과나무 컨트롤
 	private void appleCtrl() {
 		String name = gs.nameCheck(Login.loginMember.getId());
-		System.out.println(name + "님의 농장에 입장!");
+		System.out.println("[   " + name + "님의 농장에 입장!  ]" + "\n");
 		String[] apple = new String[5];
-		apple[0]="|"; //심은후
-		apple[0]="o"; //심기전
-		apple[0]=" "; //애플vo생성 후 index(나무번호),물주기,가지치기,영양제
+		for (int i = 0; i < apple.length; i++) {
+			apple[i] = "o";
+		}
+		
+		List<AppleVO> apples = new ArrayList<AppleVO>();
+		apples = as.selectAppleList();
+//		apple[0]="|"; //심은후
+//		apple[0]="o"; //심기전
+//		apple[0]=" "; //애플vo생성 후 index(나무번호),물주기,가지치기,영양제
+		
+		for (int i = 0; i < apples.size(); i++) {
+			if (apples.get(i) != null) {
+				apple[apples.get(i).getIndex() - 1] = "♣";
+			}
+		}
+		
+		for (String ap : apple) {
+			System.out.print(ap + " ");
+		}
+		
+//		for (int i = 0; i < apple.length; i++) {
+//			apple.add("o");
+//			apple.add()
+//			if(apples.get(i).getIndex() != 0) {
+//				apple[i] = "♣";
+//			System.out.print(" [" + apple[i].toString() + "]");
+//		}
+//		System.out.println("\n \n");
+//		}
+		boolean b = true;
+		
+		while(b) {
+			System.out.println("1.나무심기 2.나무정보 3.물주기 4.가지치기 5.영양제주기 6.취소");
+			int menu = sc.nextInt();
+			if(menu == 1) {
+				insertTree();
+			} else if(menu == 2) {
+				
+			} else if(menu == 3) {
+				
+			} else if(menu == 4) {
+				
+			} else if(menu == 5) {
+				
+			} else if(menu == 6) {
+				gameMenu();
+				b = false;
+			}
+		}
 	}
 	
+	//나무심기
+	private void insertTree() {
+		System.out.println("몇 번째 자리에 심으시겠습니까?");
+		index = sc.nextInt();
+		System.out.println(vo.getIndex());
+		if(index == vo.getIndex()) {
+			System.out.println("해당 자리는 나무가 존재합니다.");
+		} else if(index > 0 && index <= 5){
+			as.insertTree(index);
+		}
+	}
 	
+	//온천: hp 충전(시간당 10씩)
+	private void spa() {
+		
+	}
+	
+	//상점: 
 	public void run() {
 		gameMenu();
 	}

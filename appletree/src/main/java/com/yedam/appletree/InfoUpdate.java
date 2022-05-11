@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import com.yedam.appletree.service.MemberService;
 import com.yedam.appletree.serviceImpl.MemberServiceImpl;
+import com.yedam.appletree.vo.MemberVO;
 
 public class InfoUpdate {
 	private Scanner sc = new Scanner(System.in);
@@ -11,7 +12,7 @@ public class InfoUpdate {
 	
 	private void updateInfoTitle() {
 		System.out.println("==============================================");
-		System.out.println("=    1.비밀번호  2.연락처  3.EMAIL 4.되돌아가기    =");
+		System.out.println("=   1.비밀번호   2.연락처   3.EMAIL   4.되돌아가기  =");
 		System.out.println("==============================================");
 	}
 	
@@ -43,6 +44,7 @@ public class InfoUpdate {
 				cgEmail();
 				break;
 			case 4:
+				//되돌아가기
 				break;
 			}
 		}
@@ -74,6 +76,7 @@ public class InfoUpdate {
 			ms.updateMember(Login.loginMember);
 			System.out.println("수정완료!");
 		}
+		
 		//이메일 변경
 		private void cgEmail() {
 			System.out.println("변경할 메일을 입력하세요.");
@@ -82,7 +85,7 @@ public class InfoUpdate {
 			ms.updateMember(Login.loginMember);
 			System.out.println("수정완료!");
 		}
-		
+
 		public void run() {
 			updateInfo();
 		}

@@ -38,6 +38,7 @@ public class Member {
 		} else {
 			dao.insertMember(member);
 			System.out.println(member.getMName() + "님 회원가입 완료");
+			Login.loginMember = member;
 		}
 	}
 	
