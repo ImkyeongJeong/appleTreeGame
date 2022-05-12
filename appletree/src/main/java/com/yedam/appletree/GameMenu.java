@@ -64,6 +64,7 @@ public class GameMenu {
 //		if(name != null) {
 //			System.out.println("            " +name + "님 환영합니다.");
 //		} else 
+		Login.loginCharacter.setName(name);
 		if(name == null) {
 			System.out.println("            캐릭터가 존재하지 않습니다.");
 			System.out.println("==============================================");
@@ -75,12 +76,13 @@ public class GameMenu {
 	private void insertChar() {
 		System.out.println("캐릭터 생성 > 닉네임을 입력하세요.");
 		String name = sc.next();
-		if(gs.nameCheck(name) == null) {
-			gs.insertChar(name);
+		String nameCheck = gs.nameCheck(name);
+		if(nameCheck == null) {
+			int n = gs.insertChar(name);
+			System.out.println(n);
 			System.out.println("생성 완료!");
-			loginCharacter = gs.selectChar(name);
 			
-		} else if(gs.nameCheck(name).equals(name)) {
+		} else if(nameCheck != null) {
 			System.out.println("이미 존재하는 닉네임입니다.");
 			insertChar();
 		}
@@ -88,7 +90,7 @@ public class GameMenu {
 	
 	//1.현재상태 불러오기(날씨, 총 수확 사과 개수, 체력)
 	private void getStatus() {
-		CharacterVO status = gs.selectChar(loginCharacter.getName());
+		CharacterVO status = gs.selectChar(Login.loginCharacter.getName());
 		System.out.println(status.toString());
 	}
 	
@@ -96,6 +98,7 @@ public class GameMenu {
 	private void itemList() {
 		String name = gs.nameCheck(Login.loginMember.getId());
 		System.out.println("[" + name + "]님의 아이템");
+		
 	}
 	
 	//3.장소이동(농장, 온천, 상점)
@@ -109,7 +112,7 @@ public class GameMenu {
 				appleCtrl();
 				break;
 			case 2:
-				
+				spa();
 				break;
 			case 3:
 
@@ -154,8 +157,9 @@ public class GameMenu {
 	
 	//농장에 사과나무 정보 출력
 	private void farmInfo() {
-		String name = loginCharacter.getName();
-		System.out.println("\t   [  " + loginCharacter.getName() + "님의 농장  ]" + "\n");
+		
+		String name = Login.loginCharacter.getName();
+		System.out.println("\t   [  " + Login.loginCharacter.getName() + "님의 농장  ]" + "\n");
 		
 		String[] apple = new String[5];
 		
@@ -196,6 +200,7 @@ public class GameMenu {
 
 		if(flag){ //입력한 자리에 나무가 존재하지 않다면
 			as.insertTree(index);
+			gs.updateHpDown();
 		}
 	}
 
@@ -224,7 +229,7 @@ public class GameMenu {
 			int result = as.updateWater(index);
 			if(result  == 1) {
 				System.out.println("=== 물~.~ ===");
-				gs.updateApple(loginCharacter.getName());
+				gs.updateHpDown();
 			}
 		} else {
 			System.out.println("해당 자리는 나무가 존재하지 않습니다.");
@@ -241,7 +246,7 @@ public class GameMenu {
 			int result = as.updateNutrients(index);
 			if(result  == 1) {
 				System.out.println("=== 가지치깅~.~ ===");
-				gs.updateHp();
+				gs.updateHpDown();
 			}
 		} else {
 			System.out.println("해당 자리는 나무가 존재하지 않습니다.");
@@ -258,7 +263,7 @@ public class GameMenu {
 			int result = as.updatePruning(index);
 			if(result  == 1) {
 				System.out.println("=== 영양제~.~ ===");
-				gs.updateHp();
+				gs.updateHpDown();
 			} else {
 			System.out.println("해당 자리는 나무가 존재하지 않습니다.");
 			}
@@ -275,7 +280,8 @@ public class GameMenu {
 			int result = as.deleteApple(index);
 			if(result  == 1) {
 				System.out.println("=== 사과를 얻었습니다.~.~ ===");
-				gs.updateHp();
+				gs.updateHpDown();
+				gs.updateApple(Login.loginCharacter.getName());
 			} else {
 				System.out.println("아직 수확할 수 없습니다.");
 			}
@@ -284,7 +290,8 @@ public class GameMenu {
 	
 	//온천: hp 충전(시간당 10씩)
 	private void spa() {
-		
+		System.out.println("온천에 입장하셨습니다.");
+		gs.updateHpUp();
 	}
 	
 	//상점: 

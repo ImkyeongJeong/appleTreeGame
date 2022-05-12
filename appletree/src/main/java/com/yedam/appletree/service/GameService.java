@@ -1,6 +1,7 @@
 package com.yedam.appletree.service;
 
 import com.yedam.appletree.vo.CharacterVO;
+import com.yedam.appletree.vo.ItemVO;
 
 public interface GameService {
 	//캐릭터 생성 ㅇ
@@ -9,10 +10,14 @@ public interface GameService {
 	String nameCheck(String name);
 	//현재상태 보기 ㅇ
 	CharacterVO selectChar(String name);
+	//아이템조회
+	ItemVO selectItem(String name);
 	//보유아이템, 돈, 체력 수정
 	int updateChar(CharacterVO vo);
-	//현재상태 총 사과 수확 업데이트
+	//현재상태 총 사과 수확 업데이트 ㅇ
 	int updateApple(String name);
-	//형재상태 체력 업데이트
-	int updateHp();
+	//현재상태 체력 -10 업데이트 ㅇ
+	int updateHpDown();
+	//현재상태 체력 +10 업데이트 ㅇ
+	int updateHpUp();
 }
