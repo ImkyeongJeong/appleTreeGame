@@ -8,6 +8,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ItemVO {
-	private int ino;
-	private String iName;
+	private String itemName;
+	private int count;
+	private int money;
+	
+	@Override
+	public String toString() {
+		return  itemName + " " + count + "개 \n"
+				+ "돈 : " + money ;
+		}
 }

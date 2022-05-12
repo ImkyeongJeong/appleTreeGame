@@ -12,8 +12,6 @@ public class UserMenu {
 	private GameMenu game = new GameMenu();
 	private InfoUpdate infoUpdate = new InfoUpdate();
 	private MemberService ms = new MemberServiceImpl();
-	//접속 user캐릭터정보 저장
-	public static CharacterVO loginCharacter = new CharacterVO();
 	
 	private void userTitle() {
 		System.out.println("==============================================");

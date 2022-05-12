@@ -20,14 +20,14 @@ public class AppleServiceImpl implements AppleService{
 	AppleVO vo = new AppleVO();
 	
 	@Override
-	public int insertTree(int index) {
+	public int insertTree(int num) {
 		int n = 0;
 		String sql = "INSERT INTO APPLETREE VALUES(?, ?, DEFAULT, DEFAULT, DEFAULT)";
 		try {
 			conn = dao.getConnection();
 			psmt = conn.prepareStatement(sql);
 			psmt.setString(1, Login.loginMember.getId());
-			psmt.setInt(2, index);
+			psmt.setInt(2, num);
 			n = psmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -47,7 +47,7 @@ public class AppleServiceImpl implements AppleService{
 			psmt.setInt(1, num);
 			rs = psmt.executeQuery();
 			if(rs.next()) {
-				vo.setIndex(rs.getInt("num"));
+				vo.setNum(rs.getInt("num"));
 				vo.setWater(rs.getInt("water"));
 				vo.setNutrients(rs.getInt("nutrients"));
 				vo.setPruning(rs.getInt("pruning"));
@@ -63,14 +63,15 @@ public class AppleServiceImpl implements AppleService{
 	@Override
 	public List<AppleVO> selectAppleList() {
 		List<AppleVO> apples  = new ArrayList<AppleVO>();
-		String sql = "SELECT * FROM APPLETREE";
+		String sql = "SELECT * FROM APPLETREE WHERE C_ID = ?";
 		try {
 			conn = dao.getConnection();
 			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, Login.loginMember.getId());
 			rs = psmt.executeQuery();
 			while(rs.next()) {
-				vo = new AppleVO(); 
-				vo.setIndex(rs.getInt("num"));
+				vo = new AppleVO();
+				vo.setNum(rs.getInt("num"));
 				vo.setWater(rs.getInt("water"));
 				vo.setNutrients(rs.getInt("nutrients"));
 				vo.setPruning(rs.getInt("pruning"));
@@ -85,15 +86,75 @@ public class AppleServiceImpl implements AppleService{
 	}
 	
 	@Override
-	public int updateApple() {
-		// TODO Auto-generated method stub
-		return 0;
+	public int updateWater(int num) {
+		int n = 0;
+		String sql = "UPDATE APPLETREE SET WATER = WATER + 1 WHERE C_ID = ? AND NUM = ?";
+		try {
+			conn = dao.getConnection();
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, Login.loginMember.getId());
+			psmt.setInt(2, num);
+			n = psmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return n;
 	}
 
 	@Override
-	public int deleteApple() {
-		// TODO Auto-generated method stub
-		return 0;
+	public int updateNutrients(int num) {
+		int n = 0;
+		String sql = "UPDATE APPLETREE SET nutrients = nutrients + 1 WHERE C_ID = ? AND NUM = ?";
+		try {
+			conn = dao.getConnection();
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, Login.loginMember.getId());
+			psmt.setInt(2, num);
+			n = psmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return n;
+	}
+
+	@Override
+	public int updatePruning(int num) {
+		int n = 0;
+		String sql = "UPDATE APPLETREE SET pruning = pruning + 1 WHERE C_ID = ? AND NUM = ?";
+		try {
+			conn = dao.getConnection();
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, Login.loginMember.getId());
+			psmt.setInt(2, num);
+			n = psmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return n;
+	}
+
+	@Override
+	public int deleteApple(int num) {
+		int n = 0;
+		String sql = "DELETE APPLETREE WHERE C_ID = ? AND NUM = ? AND WATER = 3 AND nutrients = 1 AND pruning = 1";
+		try {
+			conn = dao.getConnection();
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, Login.loginMember.getId());
+			psmt.setInt(2, num);
+			n = psmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return n;
 	}
 
 	private void close() {
@@ -108,3 +169,4 @@ public class AppleServiceImpl implements AppleService{
 		}
 	}
 }
+

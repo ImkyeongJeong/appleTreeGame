@@ -6,7 +6,7 @@ import com.yedam.appletree.service.MemberService;
 import com.yedam.appletree.serviceImpl.MemberServiceImpl;
 import com.yedam.appletree.vo.MemberVO;
 
-public class Menu {
+public class MainMenu {
 	private Scanner sc = new Scanner(System.in);
 	private MemberService dao = new MemberServiceImpl();
 	private Login login = new Login();
