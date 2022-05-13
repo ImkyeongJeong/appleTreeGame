@@ -63,7 +63,6 @@ public class UserMenu {
 				}
 				//자바에 저장된 로그인 초기화
 				Login.loginMember = new MemberVO();
-				System.out.println(Login.loginMember.toString());
 			} else {
 				System.out.println("비밀번호가 맞지 않습니다.");
 			}

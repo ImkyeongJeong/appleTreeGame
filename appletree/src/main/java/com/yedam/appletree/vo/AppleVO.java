@@ -15,9 +15,11 @@ public class AppleVO {
 	
 	@Override
 	public String toString() {
-		return  "번호 : " + num + "\n"
-				+ "물 : " + water + "\n"
-				+ "영양제 : " + pruning + "\n"
-				+ "가지치기 : " + nutrients ;
+		return	"=============================== \n"
+				+ "나무번호 : " + num + "\n"
+				+ "    물 : (5/" + water + ")\n"
+				+ " 영양제 : (2/" + pruning + ")\n"
+				+ "가지치기 : (2/" + nutrients + ")\n"
+				+ "===============================";
 		}
 	}

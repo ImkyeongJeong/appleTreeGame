@@ -9,7 +9,7 @@ public interface MemberService {
 	int insertMember(MemberVO member);
 	//아이디 중복체크
 	String[] check(String id);
-	//회원조회(전체)
+	//회원 전체조회
 	List<MemberVO> selectListMember();
 	//회원조회(한건)
 	MemberVO selectMember(String id);

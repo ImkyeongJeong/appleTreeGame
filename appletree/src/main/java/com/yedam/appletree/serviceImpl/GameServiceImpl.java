@@ -82,12 +82,13 @@ public class GameServiceImpl implements GameService{
 
 	//사과 수확 후 현재상태 totalapple +1 업데이트
 	@Override
-	public int updateApple(String name) {
-		String sql = "UPDATE character SET totalapple = totalapple + 1 WHERE NAME = ?";
+	public int updateApple(int random) {
+		String sql = "UPDATE character SET totalapple = totalapple + ? WHERE NAME = ?";
 		try {
 			conn = dao.getConnection();
 			psmt = conn.prepareStatement(sql);
-			psmt.setString(1, name);
+			psmt.setInt(1, random);
+			psmt.setString(2, Login.loginCharacter.getName());
 			psmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -116,8 +117,14 @@ public class GameServiceImpl implements GameService{
 	}
 	
 	@Override
-	public int updateHpUp() {
-		String sql = "UPDATE character SET hp = hp + 10 WHERE NAME = ?";
+	public int updateHpUp(int hp) {
+		String sql= null;
+		if(hp+10 <= 100) {
+			sql = "UPDATE character SET hp = hp + 10 WHERE NAME = ?";
+			
+		} else {
+			sql = "UPDATE character SET hp = 100 WHERE NAME = ?";
+		}
 		int n = 0;
 		try {
 			conn = dao.getConnection();
@@ -153,11 +160,6 @@ public class GameServiceImpl implements GameService{
 		}
 		return vo;
 	}
-	
-	@Override //보유아이템, 돈, 체력 수정
-	public int updateChar(CharacterVO character) {
-		return 0;
-	}
 
 	private void close() {
 		// 연결순서: conn > psmt > rs
@@ -170,6 +172,4 @@ public class GameServiceImpl implements GameService{
 			e.printStackTrace();
 		}
 	}
-
-
 }

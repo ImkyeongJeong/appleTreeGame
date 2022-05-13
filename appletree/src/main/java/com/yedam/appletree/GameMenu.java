@@ -6,26 +6,22 @@ import java.util.Scanner;
 
 import com.yedam.appletree.service.AppleService;
 import com.yedam.appletree.service.GameService;
+import com.yedam.appletree.service.ItemService;
 import com.yedam.appletree.serviceImpl.AppleServiceImpl;
 import com.yedam.appletree.serviceImpl.GameServiceImpl;
+import com.yedam.appletree.serviceImpl.ItemServiceImpl;
 import com.yedam.appletree.vo.AppleVO;
 import com.yedam.appletree.vo.CharacterVO;
+import com.yedam.appletree.vo.ItemVO;
 
 public class GameMenu {
 	private Scanner sc = new Scanner(System.in);
 	private GameService gs = new GameServiceImpl();
 	private AppleVO vo = new AppleVO();
 	private AppleService as = new AppleServiceImpl();
+	private ItemService is = new ItemServiceImpl();
 	private int index = 0;
 	private List<AppleVO> apples = new ArrayList<AppleVO>();
-	
-	private void gameTitle(String name) {
-		System.out.println("==============================================");
-		System.out.println("                                              ");
-		System.out.println("                  " + name + "의 사과농장        ");
-		System.out.println("                                              ");
-		System.out.println("==============================================");
-	}
 	
 	//현재상태(날씨, 총 수확 사과 개수, 체력) / 아이템(보유아이템(사과포함), 돈
 	private void gameMenuTitle() {
@@ -36,6 +32,7 @@ public class GameMenu {
 	
 	private void gameMenu() {
 		checkChar();
+		
 		boolean b = true;
 		do {
 			gameMenuTitle();
@@ -61,10 +58,8 @@ public class GameMenu {
 	//접속user 캐릭터 유무 확인
 	private void checkChar() {
 		String name = gs.nameCheck(Login.loginMember.getId());
-//		if(name != null) {
-//			System.out.println("            " +name + "님 환영합니다.");
-//		} else 
 		Login.loginCharacter.setName(name);
+		
 		if(name == null) {
 			System.out.println("            캐릭터가 존재하지 않습니다.");
 			System.out.println("==============================================");
@@ -78,10 +73,10 @@ public class GameMenu {
 		String name = sc.next();
 		String nameCheck = gs.nameCheck(name);
 		if(nameCheck == null) {
-			int n = gs.insertChar(name);
-			System.out.println(n);
+			gs.insertChar(name);
+			Login.loginCharacter.setName(name);
+			is.insertItem();
 			System.out.println("생성 완료!");
-			
 		} else if(nameCheck != null) {
 			System.out.println("이미 존재하는 닉네임입니다.");
 			insertChar();
@@ -96,68 +91,82 @@ public class GameMenu {
 	
 	//2.해당 캐릭터 아이템창 보기
 	private void itemList() {
-		String name = gs.nameCheck(Login.loginMember.getId());
-		System.out.println("[" + name + "]님의 아이템");
-		
-	}
-	
-	//3.장소이동(농장, 온천, 상점)
-	private void move() {
-		boolean b = true;
-		do {
-			System.out.println("1.농장 2.온천 3.상점 4.취소");
-			int menu = sc.nextInt();
-			switch(menu) {
-			case 1:
-				appleCtrl();
-				break;
-			case 2:
-				spa();
-				break;
-			case 3:
-
-				break;
-			case 4:
-				b = false;
-				break;
-			}
+		List<ItemVO> list = new ArrayList<ItemVO>();
+		ItemVO item = new ItemVO();
+		list = is.itemList();
+		System.out.println("[" + Login.loginCharacter.getName() + "]님의 아이템\n");
+		for (int i = 0; i < list.size(); i++) {
+			System.out.println(item.toString());
 		}
-		while(b);
+			
 	}
 	
-	//농장: 사과나무 컨트롤
-	private void appleCtrl() {
+	//3. 이동하기
+	private void move() {
+		CharacterVO status = gs.selectChar(Login.loginCharacter.getName());
 		
 		boolean b = true;
 		
 		while(b) {
-			farmInfo();
-			System.out.println("\n");
-			System.out.println("1.나무심기 2.나무정보 3.물주기 4.가지치기 5.영양제주기 6.수확하기 7.취소");
+			System.out.println("1.농장 2.온천 3.상점 4.되돌아가기");
 			int menu = sc.nextInt();
 			
 			if(menu == 1) {
-				insertTree();
+				if(status.getHp() <= 0) {
+					System.out.println("hp부족 농장 출입 불가!");
+				} else appleFarm();
+				
 			} else if(menu == 2) {
-				treeInfo();
+				spa();
 			} else if(menu == 3) {
-				water();
+				shop();
 			} else if(menu == 4) {
-				nutrients();
-			} else if(menu == 5) {
-				pruning();
-			} else if(menu == 6) {
-				getApple();
-			} else if(menu == 7) {
-				gameMenu();
 				b = false;
 			}
 		}
 	}
 	
+	//농장: 사과나무 컨트롤
+	private void appleFarm() {
+		
+		boolean b = true;
+		
+		while(b) {
+			CharacterVO status = gs.selectChar(Login.loginCharacter.getName());
+			int hp = status.getHp();
+			
+			if(hp <= 0) {
+				System.out.println("hp가 부족합니다.!!!!");
+				break;
+			}
+			farmInfo();
+			System.out.println("\n");
+			System.out.println("1.나무심기 2.나무정보 3.물주기 4.가지치기");
+			System.out.println("5.영양제주기 6.수확하기 7.나가기");
+			int menu = sc.nextInt();
+				if(menu == 1) {
+					insertTree();
+				} else if(menu == 2) {
+					treeInfo();
+				} else if(menu == 3) {
+					water();
+				} else if(menu == 4) {
+					nutrients();
+				} else if(menu == 5) {
+					pruning();
+				} else if(menu == 6) {
+					getApple();
+				} else if(menu == 7) {
+					gameMenu();
+					b = false;
+				}
+			}
+		}
+		
+	
 	//농장에 사과나무 정보 출력
 	private void farmInfo() {
-		
+		System.out.println();
 		String name = Login.loginCharacter.getName();
 		System.out.println("\t   [  " + Login.loginCharacter.getName() + "님의 농장  ]" + "\n");
 		
@@ -181,6 +190,7 @@ public class GameMenu {
 		for (String ap : apple) {
 			System.out.print("   [" + ap + "] ");
 		}
+		
 	}
 	
 	//나무심기
@@ -198,9 +208,12 @@ public class GameMenu {
 			}
 		}
 
-		if(flag){ //입력한 자리에 나무가 존재하지 않다면
-			as.insertTree(index);
-			gs.updateHpDown();
+		if(flag){ //입력한 자리에 나무가 존재하지 않다면 심기
+			int result = as.insertTree(index);
+			if(result == 1) {
+				System.out.println(index + "번째 나무 심기 완료!");
+				gs.updateHpDown();
+			}
 		}
 	}
 
@@ -222,15 +235,11 @@ public class GameMenu {
 	private void water() {
 		System.out.println("몇 번째 나무에 물을 주시겠습니까?");
 		index = sc.nextInt();
-		boolean flag = true;
 		
 		vo = as.selectApple(index);
 		if(vo.getNum() == index) {
-			int result = as.updateWater(index);
-			if(result  == 1) {
-				System.out.println("=== 물~.~ ===");
-				gs.updateHpDown();
-			}
+			as.updateWater(index);
+			int n = gs.updateHpDown();
 		} else {
 			System.out.println("해당 자리는 나무가 존재하지 않습니다.");
 		}
@@ -245,7 +254,7 @@ public class GameMenu {
 		if(vo.getNum() == index) {
 			int result = as.updateNutrients(index);
 			if(result  == 1) {
-				System.out.println("=== 가지치깅~.~ ===");
+				System.out.println("가지치기 완료!");
 				gs.updateHpDown();
 			}
 		} else {
@@ -262,7 +271,7 @@ public class GameMenu {
 		if(vo.getNum() == index) {
 			int result = as.updatePruning(index);
 			if(result  == 1) {
-				System.out.println("=== 영양제~.~ ===");
+				System.out.println("영양제 주기 완료!");
 				gs.updateHpDown();
 			} else {
 			System.out.println("해당 자리는 나무가 존재하지 않습니다.");
@@ -276,25 +285,89 @@ public class GameMenu {
 		index = sc.nextInt();
 		
 		vo = as.selectApple(index);
-		if(vo.getNum() == index) {
+
+		if(vo.getNum() == index && vo.getWater() == 5 && vo.getNutrients() == 2 && vo.getPruning() == 2) {
 			int result = as.deleteApple(index);
 			if(result  == 1) {
-				System.out.println("=== 사과를 얻었습니다.~.~ ===");
+				int random = (int)(Math.random()*20) + 1;
+				System.out.println("!!!!! 사과(" + random + ")개를 얻었습니다. !!!!!");
 				gs.updateHpDown();
-				gs.updateApple(Login.loginCharacter.getName());
-			} else {
-				System.out.println("아직 수확할 수 없습니다.");
-			}
+				gs.updateApple(random);
+			} 
+		} else if(vo.getNum() != index) {
+			System.out.println("해당 자리는 나무가 존재하지 않습니다.");
+		} else {
+			System.out.println("아직 수확할 수 없습니다.");
+			System.out.println(vo.toString());
 		}
 	}
 	
 	//온천: hp 충전(시간당 10씩)
 	private void spa() {
+		System.out.println("==================");
 		System.out.println("온천에 입장하셨습니다.");
-		gs.updateHpUp();
+		System.out.println("==================");
+		CharacterVO status = gs.selectChar(Login.loginCharacter.getName());
+		System.out.println("현재 hp: " + status.getHp());
+		
+		boolean b = true;
+		
+		while(b) {
+			System.out.println("1.hp회복하기 2.나가기");
+			int menu = sc.nextInt();
+			if(menu == 1) {
+				status = gs.selectChar(Login.loginCharacter.getName());
+				if(status.getHp() >= 100) {
+					System.out.println("hp 모두 회복완료!!!!");
+				} else if(status.getHp() < 100) {
+					gs.updateHpUp(status.getHp());
+					System.out.println("hp +10 !!!");
+				}
+			} else if(menu == 2) {
+				b = false;
+			} else if(menu != 1) {
+				System.out.println("잘못된 선택입니다.");
+			}
+		}
 	}
 	
-	//상점: 
+	//상점: 아이템 사고 팔고
+	private void shop() {
+		boolean b = true;
+		System.out.println("==================");
+		System.out.println("상점에 입장하셨습니다.");
+		System.out.println("==================");
+
+		while(b) {
+			System.out.println("1.구입하기 2.사과팔기 3.나가기");
+			int menu = sc.nextInt();
+			
+			if(menu == 1) {
+				boolean flag = true;
+				
+				while(flag) {
+					System.out.println("1.식혜(500원) 2.네잎클로버(10,000원) 3.되돌아가기");
+					int buyMenu = sc.nextInt();
+					if(buyMenu == 1) {
+						System.out.println("식혜 구입완료!");
+					} else if(buyMenu == 2) {
+						System.out.println("네잎클로버 구입완료!");
+					} else if(buyMenu == 3) {
+						flag = false;
+					}
+				}
+			} else if(menu == 2) {
+				System.out.println("몇개를 파시겠습니까? (1개당:1,000원)");
+//				int sell = sc.nextInt();
+				//판매 했을 때 아이템에 money증가
+			} else if(menu == 3) {
+				b = false;
+			}
+		}
+
+
+	}
+	
 	public void run() {
 		gameMenu();
 	}

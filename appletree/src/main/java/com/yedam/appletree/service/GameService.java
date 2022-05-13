@@ -12,12 +12,11 @@ public interface GameService {
 	CharacterVO selectChar(String name);
 	//아이템조회
 	ItemVO selectItem(String name);
-	//보유아이템, 돈, 체력 수정
-	int updateChar(CharacterVO vo);
+
 	//현재상태 총 사과 수확 업데이트 ㅇ
-	int updateApple(String name);
+	int updateApple(int random);
 	//현재상태 체력 -10 업데이트 ㅇ
 	int updateHpDown();
 	//현재상태 체력 +10 업데이트 ㅇ
-	int updateHpUp();
+	int updateHpUp(int hp);
 }
