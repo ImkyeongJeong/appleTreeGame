@@ -17,6 +17,8 @@ public interface AppleService {
 	int updateNutrients(int num);
 	//사과나무 업데이트(영양제)
 	int updatePruning(int num);
-	//사과나무 수확 후 제거
+	//사과나무 수확 후 제거(물5, 가지치기2, 영양제1)
 	int deleteApple(int num);
+	//행동량 보다 많을 경우 나무 죽음
+	int deathApple(int num);
 }

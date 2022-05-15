@@ -20,13 +20,14 @@ public class ItemServiceImpl implements ItemService{
 	
 
 	@Override
-	public int insertItem() {
+	public int insertItem(String item) {
 		int n = 0;
-		String sql = "INSERT INTO c_item VALUES(?,null,null,DEFAULT)";
+		String sql = "INSERT INTO c_item VALUES(?,?,1)";
 		try {
 			conn = dao.getConnection();
 			psmt = conn.prepareStatement(sql);
 			psmt.setString(1, Login.loginCharacter.getName());
+			psmt.setString(2, item);
 			n = psmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -36,30 +37,61 @@ public class ItemServiceImpl implements ItemService{
 		return n;
 	}
 	
-
-
 	@Override
-	public int updateItem(int itemName) {
-		return 0;
+	public int insertApple(int apple) {
+		int n = 0;
+		String sql = "INSERT INTO c_item VALUES(?,'사과',?)";
+		try {
+			conn = dao.getConnection();
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, Login.loginCharacter.getName());
+			psmt.setInt(2, apple);
+			n = psmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return n;
 	}
 
 	@Override
-	public int deleteItem(int itemName) {
-		return 0;
+	public int updateUpApple(int apple) {
+		int n = 0;
+		String sql = "UPDATE c_item SET COUNT = COUNT + ? WHERE c_name = ? AND i_name = '사과'";
+		
+		try {
+			conn = dao.getConnection();
+			psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, apple);
+			psmt.setString(2, Login.loginCharacter.getName());
+			n = psmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return n;
 	}
 	
-	private void close() {
+	@Override
+	public int updateDownApple(int apple) {
+		int n = 0;
+		String sql = "UPDATE c_item SET COUNT = COUNT - ? WHERE c_name = ? AND i_name = '사과'";
 		try {
-			if(rs != null) rs.close();
-			if(psmt != null) psmt.close();
-			if(conn != null) conn.close();
-		} catch (Exception e) {
+			conn = dao.getConnection();
+			psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, apple);
+			psmt.setString(2, Login.loginCharacter.getName());
+			n = psmt.executeUpdate();
+		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			close();
 		}
+		return n;
 	}
-
-
-
+	
 	@Override
 	public List<ItemVO> itemList() {
 		ItemVO vo;
@@ -74,7 +106,6 @@ public class ItemServiceImpl implements ItemService{
 				vo = new ItemVO();
 				vo.setItemName(rs.getString("i_name"));
 				vo.setCount(rs.getInt("count"));
-				vo.setMoney(rs.getInt("money"));
 				list.add(vo);
 			}
 		} catch (SQLException e) {
@@ -85,4 +116,69 @@ public class ItemServiceImpl implements ItemService{
 		return list;
 	}
 
+	@Override
+	public int updateUpItem(String itemName) {
+		int n = 0;
+		String sql = "UPDATE c_item SET COUNT = COUNT + 1 WHERE c_name = ? AND i_name = ?";
+		
+		try {
+			conn = dao.getConnection();
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, Login.loginCharacter.getName());
+			psmt.setString(2, itemName);
+			n = psmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return n;
+	}
+	
+	@Override
+	public int updateDownItem(String itemName) {
+		int n = 0;
+		String sql = "UPDATE c_item SET COUNT = COUNT - 1 WHERE c_name = ? AND i_name = ?";
+		
+		try {
+			conn = dao.getConnection();
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, Login.loginCharacter.getName());
+			psmt.setString(2, itemName);
+			n = psmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return n;
+	}
+
+	@Override
+	public int deleteItem(String itemName) {
+		int n = 0;
+		String sql = "DELETE FROM c_item WHERE c_name = ? AND i_name = ? AND count = 0";
+		try {
+			conn = dao.getConnection();
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, Login.loginCharacter.getName());
+			psmt.setString(2, itemName);
+			n = psmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return n;
+	}
+	
+	private void close() {
+		try {
+			if(rs != null) rs.close();
+			if(psmt != null) psmt.close();
+			if(conn != null) conn.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

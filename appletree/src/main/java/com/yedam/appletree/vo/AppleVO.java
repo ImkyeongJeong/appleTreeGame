@@ -10,16 +10,16 @@ import lombok.NoArgsConstructor;
 public class AppleVO {
 	private int num;		//나무 심은 자리번호
 	private int water;		//물주기
-	private int nutrients;	//가지치기
-	private int pruning;	//영양제
+	private int nutrients;	//영양제
+	private int pruning;	//가지치기
 	
 	@Override
 	public String toString() {
 		return	"=============================== \n"
 				+ "나무번호 : " + num + "\n"
 				+ "    물 : (5/" + water + ")\n"
-				+ " 영양제 : (2/" + pruning + ")\n"
-				+ "가지치기 : (2/" + nutrients + ")\n"
+				+ " 영양제 : (1/" + nutrients + ")\n"
+				+ "가지치기 : (2/" + pruning + ")\n"
 				+ "===============================";
 		}
 	}

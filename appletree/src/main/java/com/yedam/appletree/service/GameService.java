@@ -10,13 +10,16 @@ public interface GameService {
 	String nameCheck(String name);
 	//현재상태 보기 ㅇ
 	CharacterVO selectChar(String name);
-	//아이템조회
-	ItemVO selectItem(String name);
-
+	//money다운 업데이트
+	int updateDownMoney(int money);
+	//money업 업데이트
+	int updateUpMoney(int money);
 	//현재상태 총 사과 수확 업데이트 ㅇ
-	int updateApple(int random);
+	int updateTotalApple(int random);
 	//현재상태 체력 -10 업데이트 ㅇ
 	int updateHpDown();
-	//현재상태 체력 +10 업데이트 ㅇ
+	//온천 현재상태 체력 +10 업데이트 ㅇ
 	int updateHpUp(int hp);
+	//아이템 사용하여 체력 +10 업데이트 
+	int useItemUpdateHpUp(String itemName, int hp);
 }

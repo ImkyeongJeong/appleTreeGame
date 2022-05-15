@@ -13,6 +13,12 @@ public class MainMenu {
 	private Member member = new Member();
 	private UserMenu userMenu = new UserMenu();
 	
+	public static void clearScreen() {
+		for (int i = 0; i < 40; i++) {
+			System.out.println();
+		}
+			
+	}
 	private void mainTitle() {
 		System.out.println("==============================================");
 		System.out.println("=                                            =");

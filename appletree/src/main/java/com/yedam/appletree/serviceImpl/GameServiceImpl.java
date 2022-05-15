@@ -23,7 +23,7 @@ public class GameServiceImpl implements GameService{
 	@Override //캐릭터 생성
 	public int insertChar(String name) {
 		int n = 0;
-		String sql = "INSERT INTO character VALUES(?, ?, DEFAULT, DEFAULT)";
+		String sql = "INSERT INTO character VALUES(?, ?, DEFAULT, DEFAULT, DEFAULT)";
 		try {
 			conn = dao.getConnection();
 			psmt = conn.prepareStatement(sql);
@@ -70,6 +70,7 @@ public class GameServiceImpl implements GameService{
 			if(rs.next()) {
 				vo.setName(rs.getString("name"));
 				vo.setHp(rs.getInt("hp"));
+				vo.setMoney(rs.getInt("money"));
 				vo.setTotalApple(rs.getInt("totalapple"));
 			}
 		} catch (SQLException e) {
@@ -82,7 +83,7 @@ public class GameServiceImpl implements GameService{
 
 	//사과 수확 후 현재상태 totalapple +1 업데이트
 	@Override
-	public int updateApple(int random) {
+	public int updateTotalApple(int random) {
 		String sql = "UPDATE character SET totalapple = totalapple + ? WHERE NAME = ?";
 		try {
 			conn = dao.getConnection();
@@ -138,29 +139,87 @@ public class GameServiceImpl implements GameService{
 		}
 		return n;
 	}
-	
+
 	@Override
-	public ItemVO selectItem(String name) {
-		ItemVO vo = new ItemVO();
-		String sql = "SELECT * FROM character WHERE NAME = ?";
+	public int useItemUpdateHpUp(String itemName, int hp) {
+		String sql= null;
+		int hpUP = 0;
+		
+		if(itemName.equals("달걀")) {
+			hpUP = 30;
+		} else if(itemName.equals("식혜")) {
+			hpUP = 50;
+		} else if(itemName.equals("오렌지주스")) {
+			hpUP = 100;
+		} else if(itemName.equals("사과")) {
+			hpUP = 50;
+		}
+		
+		if(hp+hpUP <= 100) {
+			if(itemName.equals("달걀")) {
+				sql = "UPDATE character SET hp = hp + 30 WHERE NAME = ?";
+			} else if(itemName.equals("식혜")){
+				sql = "UPDATE character SET hp = hp + 50 WHERE NAME = ?";
+			} else if(itemName.equals("오렌지주스")) {
+				sql = "UPDATE character SET hp = hp + 100 WHERE NAME = ?";
+			} else if(itemName.equals("사과")) {
+				sql = "UPDATE character SET hp = hp + 50 WHERE NAME = ?";
+			}
+		} else {
+			sql = "UPDATE character SET hp = 100 WHERE NAME = ?";
+		}
+		int n = 0;
 		try {
 			conn = dao.getConnection();
 			psmt = conn.prepareStatement(sql);
-			psmt.setString(1, name);
-			rs = psmt.executeQuery();
-			if(rs.next()) {
-				vo.setItemName(rs.getString("i_name"));
-				vo.setCount(rs.getInt("count"));
-				vo.setMoney(rs.getInt("money"));
-			}
+			psmt.setString(1, Login.loginCharacter.getName());
+			n = psmt.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			close();
 		}
-		return vo;
+		return n;
 	}
-
+	
+	@Override
+	public int updateDownMoney(int money) {
+		int n = 0;
+		String sql = "UPDATE character SET money = money - ? WHERE NAME = ?";
+		
+		try {
+			conn = dao.getConnection();
+			psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, money);
+			psmt.setString(2, Login.loginCharacter.getName());
+			n = psmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return n;
+	}
+	
+	@Override
+	public int updateUpMoney(int money) {
+		int n = 0;
+		String sql = "UPDATE character SET money = money + ? WHERE NAME = ?";
+		
+		try {
+			conn = dao.getConnection();
+			psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, money);
+			psmt.setString(2, Login.loginCharacter.getName());
+			n = psmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return n;
+	}
+	
 	private void close() {
 		// 연결순서: conn > psmt > rs
 		// 닫는순서: rs > psmt > conn

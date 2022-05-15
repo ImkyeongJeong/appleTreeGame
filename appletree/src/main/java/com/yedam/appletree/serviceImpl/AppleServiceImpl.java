@@ -142,7 +142,25 @@ public class AppleServiceImpl implements AppleService{
 	@Override
 	public int deleteApple(int num) {
 		int n = 0;
-		String sql = "DELETE APPLETREE WHERE C_ID = ? AND NUM = ? AND WATER = 5 AND nutrients = 2 AND pruning = 2";
+		String sql = "DELETE APPLETREE WHERE C_ID = ? AND NUM = ? AND WATER = 5 AND nutrients = 1 AND pruning = 2";
+		try {
+			conn = dao.getConnection();
+			psmt = conn.prepareStatement(sql);
+			psmt.setString(1, Login.loginMember.getId());
+			psmt.setInt(2, num);
+			n = psmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return n;
+	}
+	
+	@Override
+	public int deathApple(int num) {
+		int n = 0;
+		String sql = "DELETE APPLETREE WHERE C_ID = ? AND NUM = ?";
 		try {
 			conn = dao.getConnection();
 			psmt = conn.prepareStatement(sql);
