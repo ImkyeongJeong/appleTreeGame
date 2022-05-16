@@ -34,6 +34,7 @@ public class MainMenu {
 	}
 
 	private void mainTitle() {
+
 		System.out.println("==============================================");
 		System.out.println("=                                            =");
 		System.out.println("=                 Apple Tree                 =");
@@ -73,11 +74,17 @@ public class MainMenu {
 	private void rank() {
 		List<CharacterVO> list = new ArrayList<CharacterVO>();
 		list = gs.selectRank();
+		clearScreen();
+		System.out.println("==============================================");
+		System.out.println("=              Apple Tree 랭킹                =");
+		System.out.println("==============================================");
+		System.out.println();
 		for (int i = 0; i < list.size(); i++) {
-			System.out.println(i+1 + "등 [" + list.get(i).getName() +"]님");
-			System.out.println("총 수확한 사과: " + list.get(i).getTotalApple());
+			System.out.println("\t\t" + (i+1) + "등 [" + list.get(i).getName() +"]님");
+			System.out.println("\t\t총 수확한 사과: " + list.get(i).getTotalApple());
 			System.out.println();
 		}
+		System.out.println("==============================================");
 		Login.loginMember.setId("0");
 	}
 	

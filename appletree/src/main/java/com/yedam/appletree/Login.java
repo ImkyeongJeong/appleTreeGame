@@ -20,6 +20,10 @@ public class Login {
 	
 	private void loginTitle() {
 		System.out.println("==============================================");
+		System.out.println("=                                            =");
+		System.out.println("=                 Apple Tree                 =");
+		System.out.println("=                                            =");
+		System.out.println("==============================================");
 		System.out.println("=                  로  그  인                 =");
 		System.out.println("==============================================");
 	}

@@ -15,6 +15,10 @@ public class UserMenu {
 	
 	private void userTitle() {
 		System.out.println("==============================================");
+		System.out.println("=                                            =");
+		System.out.println("=                 Apple Tree                 =");
+		System.out.println("=                                            =");
+		System.out.println("==============================================");
 		System.out.println("=  1.게임접속   2.정보수정   3.로그아웃   4.회원탈퇴  =");
 		System.out.println("==============================================");
 	}

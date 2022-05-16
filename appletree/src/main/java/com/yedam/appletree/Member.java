@@ -12,6 +12,10 @@ public class Member {
 	
 	private void memberJoinTitle() {
 		System.out.println("==============================================");
+		System.out.println("=                                            =");
+		System.out.println("=                 Apple Tree                 =");
+		System.out.println("=                                            =");
+		System.out.println("==============================================");
 		System.out.println("=                 회  원  가  입               =");
 		System.out.println("==============================================");
 	}

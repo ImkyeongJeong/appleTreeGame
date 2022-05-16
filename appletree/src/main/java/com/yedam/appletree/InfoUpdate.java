@@ -12,6 +12,10 @@ public class InfoUpdate {
 	
 	private void updateInfoTitle() {
 		System.out.println("=======================================================");
+		System.out.println("=                                                     =");
+		System.out.println("=                      Apple Tree                     =");
+		System.out.println("=                                                     =");
+		System.out.println("=======================================================");
 		System.out.println("=   1.비밀번호수정   2.연락처수정   3.EMAIL수정   4.되돌아가기  =");
 		System.out.println("=======================================================");
 	}

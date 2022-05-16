@@ -26,6 +26,10 @@ public class GameMenu {
 	//현재상태(날씨, 총 수확 사과 개수, 체력) / 아이템(보유아이템(사과포함), 돈
 	private void gameMenuTitle() {
 		System.out.println("==============================================");
+		System.out.println("=                                            =");
+		System.out.println("=                 Apple Tree                 =");
+		System.out.println("=                                            =");
+		System.out.println("==============================================");
 		System.out.println("=   1.현재상태  2.아이템창  3.이동하기  4.게임종료    =");
 		System.out.println("==============================================");
 	}
@@ -64,6 +68,10 @@ public class GameMenu {
 		
 		if(name == null) {
 			MainMenu.clearScreen();
+			System.out.println("==============================================");
+			System.out.println("=                                            =");
+			System.out.println("=                 Apple Tree                 =");
+			System.out.println("=                                            =");
 			System.out.println("==============================================");
 			System.out.println("            캐릭터가 존재하지 않습니다.");
 			System.out.println("==============================================");
@@ -155,7 +163,7 @@ public class GameMenu {
 								gs.useItemUpdateHpUp(list.get(i).getItemName(), hpSelect.getHp());
 								System.out.println(useItem + "을(를) 사용하여 hp +" + hpUP + "!");
 								MainMenu.sleepTime(1000);
-								
+								MainMenu.clearScreen();
 							}
 						}
 					}
@@ -187,7 +195,11 @@ public class GameMenu {
 			CharacterVO status = gs.selectChar(Login.loginCharacter.getName());
 			MainMenu.clearScreen();
 			System.out.println("==============================================");
-			System.out.println("1.농장가기 2.온천가기 3.상점가기 4.되돌아가기");
+			System.out.println("=                                            =");
+			System.out.println("=                 Apple Tree                 =");
+			System.out.println("=                                            =");
+			System.out.println("==============================================");
+			System.out.println("=   1.농장가기  2.온천가기  3.상점가기  4.되돌아가기  =");
 			System.out.println("==============================================");
 			int menu = sc.nextInt();
 			
@@ -344,7 +356,7 @@ public class GameMenu {
 		CharacterVO selectHp = gs.selectChar(Login.loginCharacter.getName()); //다시 조회
 		System.out.println("현재 내 채력: " + selectHp.getHp());
 //		String name = Login.loginCharacter.getName();
-		System.out.println("==========================================");
+		System.out.println("==========================================\n");
 		System.out.println("\t   [  " + Login.loginCharacter.getName() + "님의 농장  ]" + "\n");
 		
 		String[] apple = new String[5];
@@ -360,15 +372,46 @@ public class GameMenu {
 		//전체 조회 후 자리값에 나무 표시
 		for (int i = 0; i < apples.size(); i++) {
 			if (apples.get(i) != null) {
-				apple[apples.get(i).getNum() - 1] = "♣";
+				apple[apples.get(i).getNum() - 1] = "Ψ";
+			}
+		}
+		
+		//나무 전체 조회하여 apples에 대입
+		apples = as.selectAppleList();
+		for (int i = 0; i < apples.size(); i++) {
+			if (apples.get(i) != null && apples.get(i).getWater() == 3 && apples.get(i).getNutrients() ==1 && apples.get(i).getPruning() ==2) {
+				apple[apples.get(i).getNum() - 1] = "♥";
 			}
 		}
 		
 		for (String ap : apple) {
 			System.out.print("   [" + ap + "] ");
 		}
-		System.out.println();
+		System.out.println("\n");
 		System.out.println("==========================================");
+	}
+	
+	private void progress() {
+	    System.out.printf("■");
+	    MainMenu.sleepTime(200);
+	    System.out.printf("■");
+	    MainMenu.sleepTime(200);
+	    System.out.printf("■");
+	    MainMenu.sleepTime(200);
+	    System.out.printf("■");
+	    MainMenu.sleepTime(200);
+	    System.out.printf("■");
+	    MainMenu.sleepTime(200);
+	    System.out.printf("■");
+	    MainMenu.sleepTime(200);
+	    System.out.printf("■");
+	    MainMenu.sleepTime(200);
+	    System.out.printf("■");
+	    MainMenu.sleepTime(200);
+	    System.out.printf("■");
+	    MainMenu.sleepTime(200);
+	    System.out.println("■");
+	    MainMenu.sleepTime(200);
 	}
 	
 	//나무심기
@@ -393,6 +436,8 @@ public class GameMenu {
 			if(flag){ //입력한 자리에 나무가 존재하지 않다면 심기
 				int result = as.insertTree(index);
 				if(result == 1) {
+					System.out.println("나무 심는 중");
+					progress();
 					System.out.println("나무 심기 완료!");
 					MainMenu.sleepTime(1000);
 					gs.updateHpDown();
@@ -425,6 +470,8 @@ public class GameMenu {
 		if(vo.getNum() == index) {
 			int result = as.updateWater(index);
 			if(result == 1) {
+				System.out.println("물을 주는 중");
+				progress();
 				System.out.println("물주기 완료!");
 				MainMenu.sleepTime(1000);
 				gs.updateHpDown();
@@ -452,6 +499,8 @@ public class GameMenu {
 		if(vo.getNum() == index) {
 			int result = as.updateNutrients(index);
 			if(result  == 1) {
+				System.out.println("영양제 주는 중");
+				progress();
 				System.out.println("영양제 주기 완료!");
 				MainMenu.sleepTime(1000);
 				gs.updateHpDown();
@@ -463,10 +512,10 @@ public class GameMenu {
 					System.out.println("....필요량 이상의 (영양제)투입으로 나무가 죽었습니다.");
 					MainMenu.sleepTime(1000);
 				}
-			} else {
+			}
+		} else {
 			System.out.println("해당 자리는 나무가 존재하지 않습니다.");
 			MainMenu.sleepTime(1000);
-			}
 		}
 	}
 	
@@ -479,6 +528,8 @@ public class GameMenu {
 			int result = as.updatePruning(index);
 
 			if(result  == 1) {
+				System.out.println("가지치기 중");
+				progress();
 				System.out.println("가지치기 완료!");
 				MainMenu.sleepTime(1000);
 				gs.updateHpDown();
@@ -508,6 +559,8 @@ public class GameMenu {
 		if(vo.getNum() == index && vo.getWater() == 3 && vo.getNutrients() == 1 && vo.getPruning() == 2) {
 			int result = as.deleteApple(index);
 			if(result  == 1) {
+				System.out.println("수확하는 중");
+				progress();
 				int random = (int)(Math.random()*20) + 1; //최대20개 수확
 				System.out.println("!!!!! 사과(" + random + ")개를 얻었습니다. !!!!!");
 				MainMenu.sleepTime(1000);
@@ -749,12 +802,12 @@ public class GameMenu {
 							is.updateDownItem("네잎클로버");
 							System.out.println(sell * 1000 + "원 획득!");
 							System.out.println("네잎클로버 효과로 " + (int)((sell * 1000) * 0.2) + "원 추가 획득!");
-							MainMenu.sleepTime(1000);
+							MainMenu.sleepTime(1300);
 						} else {
 							gs.updateUpMoney((sell*1000));
 							is.updateDownApple(sell);
 							System.out.println(sell * 1000 + "원 획득!");
-							MainMenu.sleepTime(1000);
+							MainMenu.sleepTime(1300);
 						}
 						
 						//판매 후 다시 조회했을 때 사과||네잎클로버 0개일 때 아이템창에서 삭제
