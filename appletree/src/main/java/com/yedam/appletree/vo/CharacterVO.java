@@ -32,8 +32,7 @@ public class CharacterVO {
 			}
 		}
 		
-		return  "[" + name + "]님의 현재상태\n"
-				+ "체력 : " + hp + "\n"
+		return   "체력 : " + hp + "\n"
 				+ "현금 : " + money + "\n"
 				+ "현재 내 보유 사과: " + apple + "\n"
 				+ "총 수확한 사과 : " + totalApple;

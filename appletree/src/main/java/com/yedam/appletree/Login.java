@@ -26,6 +26,7 @@ public class Login {
 
 	//로그인
 	private void login() {
+		MainMenu.clearScreen();
 		loginTitle();
 		System.out.println("아이디를 입력하세요.");
 		String id = sc.next();
@@ -40,11 +41,18 @@ public class Login {
 			loginMember = ms.selectMember(id);
 			loginCharacter = gs.selectChar(loginMember.getId());
 			System.out.println("로그인 성공!");
+			MainMenu.sleepTime(800);
+			MainMenu.clearScreen();
 		} else if(checkId == null) {
 			System.out.println("존재하지 않는 아이디입니다.");
+			MainMenu.sleepTime(800);
+			MainMenu.clearScreen();
 			loginMember.setId("0");
 		} else if(checkId != null && !checkPwd.equals(pwd)) {
 			System.out.println("비밀번호가 틀렸습니다.");
+			loginMember.setId("0");
+			MainMenu.sleepTime(800);
+			MainMenu.clearScreen();
 		}
 	}
 	

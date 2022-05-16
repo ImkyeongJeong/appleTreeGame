@@ -26,7 +26,7 @@ public class AppleServiceImpl implements AppleService{
 		try {
 			conn = dao.getConnection();
 			psmt = conn.prepareStatement(sql);
-			psmt.setString(1, Login.loginMember.getId());
+			psmt.setString(1, Login.loginCharacter.getName());
 			psmt.setInt(2, num);
 			n = psmt.executeUpdate();
 		} catch (SQLException e) {
@@ -40,11 +40,12 @@ public class AppleServiceImpl implements AppleService{
 	@Override
 	public AppleVO selectApple(int num) {
 		AppleVO vo = new AppleVO();
-		String sql = "SELECT * FROM APPLETREE WHERE NUM = ?";
+		String sql = "SELECT * FROM APPLETREE WHERE c_name = ? AND NUM = ?";
 		try {
 			conn = dao.getConnection();
 			psmt = conn.prepareStatement(sql);
-			psmt.setInt(1, num);
+			psmt.setString(1, Login.loginCharacter.getName());
+			psmt.setInt(2, num);
 			rs = psmt.executeQuery();
 			if(rs.next()) {
 				vo.setNum(rs.getInt("num"));
@@ -63,11 +64,11 @@ public class AppleServiceImpl implements AppleService{
 	@Override
 	public List<AppleVO> selectAppleList() {
 		List<AppleVO> apples  = new ArrayList<AppleVO>();
-		String sql = "SELECT * FROM APPLETREE WHERE C_ID = ?";
+		String sql = "SELECT * FROM APPLETREE WHERE c_name = ?";
 		try {
 			conn = dao.getConnection();
 			psmt = conn.prepareStatement(sql);
-			psmt.setString(1, Login.loginMember.getId());
+			psmt.setString(1, Login.loginCharacter.getName());
 			rs = psmt.executeQuery();
 			while(rs.next()) {
 				vo = new AppleVO();
@@ -88,11 +89,11 @@ public class AppleServiceImpl implements AppleService{
 	@Override
 	public int updateWater(int num) {
 		int n = 0;
-		String sql = "UPDATE APPLETREE SET WATER = WATER + 1 WHERE C_ID = ? AND NUM = ?";
+		String sql = "UPDATE APPLETREE SET WATER = WATER + 1 WHERE c_name = ? AND NUM = ?";
 		try {
 			conn = dao.getConnection();
 			psmt = conn.prepareStatement(sql);
-			psmt.setString(1, Login.loginMember.getId());
+			psmt.setString(1, Login.loginCharacter.getName());
 			psmt.setInt(2, num);
 			n = psmt.executeUpdate();
 		} catch (SQLException e) {
@@ -106,11 +107,11 @@ public class AppleServiceImpl implements AppleService{
 	@Override
 	public int updateNutrients(int num) {
 		int n = 0;
-		String sql = "UPDATE APPLETREE SET nutrients = nutrients + 1 WHERE C_ID = ? AND NUM = ?";
+		String sql = "UPDATE APPLETREE SET nutrients = nutrients + 1 WHERE c_name = ? AND NUM = ?";
 		try {
 			conn = dao.getConnection();
 			psmt = conn.prepareStatement(sql);
-			psmt.setString(1, Login.loginMember.getId());
+			psmt.setString(1, Login.loginCharacter.getName());
 			psmt.setInt(2, num);
 			n = psmt.executeUpdate();
 		} catch (SQLException e) {
@@ -124,11 +125,11 @@ public class AppleServiceImpl implements AppleService{
 	@Override
 	public int updatePruning(int num) {
 		int n = 0;
-		String sql = "UPDATE APPLETREE SET pruning = pruning + 1 WHERE C_ID = ? AND NUM = ?";
+		String sql = "UPDATE APPLETREE SET pruning = pruning + 1 WHERE c_name = ? AND NUM = ?";
 		try {
 			conn = dao.getConnection();
 			psmt = conn.prepareStatement(sql);
-			psmt.setString(1, Login.loginMember.getId());
+			psmt.setString(1, Login.loginCharacter.getName());
 			psmt.setInt(2, num);
 			n = psmt.executeUpdate();
 		} catch (SQLException e) {
@@ -142,11 +143,11 @@ public class AppleServiceImpl implements AppleService{
 	@Override
 	public int deleteApple(int num) {
 		int n = 0;
-		String sql = "DELETE APPLETREE WHERE C_ID = ? AND NUM = ? AND WATER = 5 AND nutrients = 1 AND pruning = 2";
+		String sql = "DELETE APPLETREE WHERE c_name = ? AND NUM = ? AND WATER = 3 AND nutrients = 1 AND pruning = 2";
 		try {
 			conn = dao.getConnection();
 			psmt = conn.prepareStatement(sql);
-			psmt.setString(1, Login.loginMember.getId());
+			psmt.setString(1, Login.loginCharacter.getName());
 			psmt.setInt(2, num);
 			n = psmt.executeUpdate();
 		} catch (SQLException e) {
@@ -160,11 +161,11 @@ public class AppleServiceImpl implements AppleService{
 	@Override
 	public int deathApple(int num) {
 		int n = 0;
-		String sql = "DELETE APPLETREE WHERE C_ID = ? AND NUM = ?";
+		String sql = "DELETE APPLETREE WHERE c_name = ? AND NUM = ?";
 		try {
 			conn = dao.getConnection();
 			psmt = conn.prepareStatement(sql);
-			psmt.setString(1, Login.loginMember.getId());
+			psmt.setString(1, Login.loginCharacter.getName());
 			psmt.setInt(2, num);
 			n = psmt.executeUpdate();
 		} catch (SQLException e) {

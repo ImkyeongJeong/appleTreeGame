@@ -11,9 +11,9 @@ public class InfoUpdate {
 	private MemberService ms = new MemberServiceImpl();
 	
 	private void updateInfoTitle() {
-		System.out.println("==============================================");
-		System.out.println("=   1.비밀번호   2.연락처   3.EMAIL   4.되돌아가기  =");
-		System.out.println("==============================================");
+		System.out.println("=======================================================");
+		System.out.println("=   1.비밀번호수정   2.연락처수정   3.EMAIL수정   4.되돌아가기  =");
+		System.out.println("=======================================================");
 	}
 	
 	//접속 user정보
@@ -26,6 +26,7 @@ public class InfoUpdate {
 	
 	//정보수정
 		private void updateInfo() {
+			MainMenu.clearScreen();
 			//접속자 정보 출력
 			loginInfo();
 			updateInfoTitle();
@@ -63,8 +64,10 @@ public class InfoUpdate {
 				Login.loginMember.setPwd(cgPwd);
 				ms.updateMember(Login.loginMember);
 				System.out.println("비밀번호 변경완료!");
+				MainMenu.sleepTime(1000);
 			} else if(!checkPwd.equals(pwd)) { 
 				System.out.println("현재 비밀번호가 맞지 않습니다.");
+				MainMenu.sleepTime(1000);
 			}
 		}
 		
@@ -75,15 +78,17 @@ public class InfoUpdate {
 			Login.loginMember.setPhone(cgPhone);
 			ms.updateMember(Login.loginMember);
 			System.out.println("수정완료!");
+			MainMenu.sleepTime(1000);
 		}
 		
 		//이메일 변경
 		private void cgEmail() {
 			System.out.println("변경할 메일을 입력하세요.");
 			String cgEmail = sc.next();
-			Login.loginMember.setPhone(cgEmail);
+			Login.loginMember.setEmail(cgEmail);
 			ms.updateMember(Login.loginMember);
 			System.out.println("수정완료!");
+			MainMenu.sleepTime(1000);
 		}
 
 		public void run() {

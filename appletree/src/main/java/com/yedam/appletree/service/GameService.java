@@ -1,7 +1,8 @@
 package com.yedam.appletree.service;
 
+import java.util.List;
+
 import com.yedam.appletree.vo.CharacterVO;
-import com.yedam.appletree.vo.ItemVO;
 
 public interface GameService {
 	//캐릭터 생성 ㅇ
@@ -22,4 +23,6 @@ public interface GameService {
 	int updateHpUp(int hp);
 	//아이템 사용하여 체력 +10 업데이트 
 	int useItemUpdateHpUp(String itemName, int hp);
+	//랭킹보기
+	List<CharacterVO> selectRank();
 }

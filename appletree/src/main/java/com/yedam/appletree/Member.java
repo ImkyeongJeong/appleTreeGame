@@ -18,6 +18,7 @@ public class Member {
 	
 	//회원가입
 	private void memberJoin() {
+		MainMenu.clearScreen();
 		memberJoinTitle();
 		System.out.println("아이디를 입력하세요.");
 		String id = sc.next();
@@ -35,10 +36,14 @@ public class Member {
 		String checkId = checkIdPwd[0];
 		if(checkId != null && checkId.equals(id)) {
 			System.out.println("이미 존재하는 아이디입니다.");
+			MainMenu.sleepTime(800);
+			MainMenu.clearScreen();
 			Login.loginMember.setId("0");
 		} else {
 			dao.insertMember(member);
 			System.out.println(member.getMName() + "님 회원가입 완료");
+			MainMenu.sleepTime(800);
+			MainMenu.clearScreen();
 			Login.loginMember = member;
 		}
 	}

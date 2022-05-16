@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.yedam.appletree.GameMenu;
 import com.yedam.appletree.Login;
@@ -218,6 +220,28 @@ public class GameServiceImpl implements GameService{
 			close();
 		}
 		return n;
+	}
+	
+	@Override //랭킹
+	public List<CharacterVO> selectRank() {
+		List<CharacterVO> rank  = new ArrayList<CharacterVO>();
+		String sql = "SELECT name, totalapple, dense_rank() over (order by totalapple desc) FROM character ORDER BY totalapple desc";
+		try {
+			conn = dao.getConnection();
+			psmt = conn.prepareStatement(sql);
+			rs = psmt.executeQuery();
+			while(rs.next()) {
+				vo = new CharacterVO();
+				vo.setName(rs.getString("name"));
+				vo.setTotalApple(rs.getInt("totalapple"));
+				rank.add(vo);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return rank;
 	}
 	
 	private void close() {

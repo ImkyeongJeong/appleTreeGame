@@ -1,9 +1,14 @@
 package com.yedam.appletree;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
+import com.yedam.appletree.service.GameService;
 import com.yedam.appletree.service.MemberService;
+import com.yedam.appletree.serviceImpl.GameServiceImpl;
 import com.yedam.appletree.serviceImpl.MemberServiceImpl;
+import com.yedam.appletree.vo.CharacterVO;
 import com.yedam.appletree.vo.MemberVO;
 
 public class MainMenu {
@@ -12,20 +17,29 @@ public class MainMenu {
 	private Login login = new Login();
 	private Member member = new Member();
 	private UserMenu userMenu = new UserMenu();
-	
+	private GameService gs = new GameServiceImpl();
 	public static void clearScreen() {
 		for (int i = 0; i < 40; i++) {
 			System.out.println();
 		}
-			
 	}
+	
+	public static void sleepTime(int sec) {
+		long c = System.currentTimeMillis();
+			while (true) {
+			if ((System.currentTimeMillis() - c) >= sec) {
+				break;
+			}
+		}
+	}
+
 	private void mainTitle() {
 		System.out.println("==============================================");
 		System.out.println("=                                            =");
 		System.out.println("=                 Apple Tree                 =");
 		System.out.println("=                                            =");
 		System.out.println("==============================================");
-		System.out.println("=        1.로그인    2.회원가입    3.종료         =");
+		System.out.println("=       1.로그인    2.회원가입    3.랭킹보기       =");
 		System.out.println("==============================================");
 	}
 	
@@ -43,8 +57,7 @@ public class MainMenu {
 				member.run();
 				break;
 			case 3:
-				System.out.println("bye bye");
-				b = false;
+				rank();
 				break;
 			}
 			
@@ -55,6 +68,17 @@ public class MainMenu {
 				mainMenu();
 			}
 		}
+	}
+	
+	private void rank() {
+		List<CharacterVO> list = new ArrayList<CharacterVO>();
+		list = gs.selectRank();
+		for (int i = 0; i < list.size(); i++) {
+			System.out.println(i+1 + "등 [" + list.get(i).getName() +"]님");
+			System.out.println("총 수확한 사과: " + list.get(i).getTotalApple());
+			System.out.println();
+		}
+		Login.loginMember.setId("0");
 	}
 	
 	public void run() {

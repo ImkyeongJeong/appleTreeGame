@@ -17,7 +17,7 @@ public class AppleVO {
 	public String toString() {
 		return	"=============================== \n"
 				+ "나무번호 : " + num + "\n"
-				+ "    물 : (5/" + water + ")\n"
+				+ "    물 : (3/" + water + ")\n"
 				+ " 영양제 : (1/" + nutrients + ")\n"
 				+ "가지치기 : (2/" + pruning + ")\n"
 				+ "===============================";

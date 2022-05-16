@@ -23,6 +23,7 @@ public class UserMenu {
 	private void userMenu() {
 		boolean b = true;
 		do {
+			MainMenu.clearScreen();
 			userTitle();
 			System.out.println("메뉴를 선택하세요.");
 			int menu = sc.nextInt();
@@ -37,6 +38,7 @@ public class UserMenu {
 				break;
 			case 3:
 				//로그아웃
+				MainMenu.clearScreen();
 				b = false;
 				break;
 			case 4:
@@ -60,11 +62,15 @@ public class UserMenu {
 				int n = ms.deleteMember(Login.loginMember.getId());
 				if(n == 1) {
 					System.out.println("탈퇴완료");
+					MainMenu.sleepTime(800);
+					MainMenu.clearScreen();
 				}
 				//자바에 저장된 로그인 초기화
 				Login.loginMember = new MemberVO();
 			} else {
 				System.out.println("비밀번호가 맞지 않습니다.");
+				MainMenu.sleepTime(800);
+				MainMenu.clearScreen();
 			}
 		}
 	}
